@@ -1,0 +1,5 @@
+aiohttp
+pyalpa
+alpa-conf
+packaging
+specfile
