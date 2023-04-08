@@ -1,0 +1,26 @@
+---
+name: Autoupdate Alpa repository
+description: Automatically check and update packages in Alpa repository
+
+branding:
+  icon: refresh-cw
+  color: blue
+
+inputs:
+  email-name:
+    description: Email address of your bot who will be sending emails of failed updates
+    required: true
+  email-password:
+    description: Password to your bot's email address
+    required: true
+  smtp-address:
+    description: smtp address of your mail provider. For gmail it is `smtp.gmail.com`
+    required: true
+  debug:
+    description: Turn on debug level
+    default: "false"
+    required: false
+
+runs:
+  using: docker
+  image: "Dockerfile"
