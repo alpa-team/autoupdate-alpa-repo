@@ -13,9 +13,9 @@ from time import sleep
 from typing import Optional
 
 from aiohttp import ClientSession
-from alpa.repository import LocalRepo
-from alpa_conf import MetadataConfig
-from alpa_conf.exceptions import AlpaConfException
+from alpa.config.metadata import MetadataConfig
+from alpa.exceptions import AlpaConfException
+from alpa.repository.branch import LocalRepoBranch
 from packaging.version import parse
 from specfile import Specfile
 
@@ -91,7 +91,7 @@ class MailClient:
 class Autoupdator69:
     def __init__(self) -> None:
         self.cwd = Path(getcwd())
-        self.local_repo = LocalRepo(self.cwd)
+        self.local_repo = LocalRepoBranch(self.cwd)
         self.pkg_commit_sha: dict[str, str] = {}
         self.mail_client = MailClient()
 
