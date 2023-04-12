@@ -142,13 +142,17 @@ class Autoupdator69:
         specfile.update_tag("Version", last_version_from_anytia)
         specfile.save()
 
-        self.local_repo.git_cmd.add(f"{pkg_name}.spec")
-        index = self.local_repo.local_repo.index
-        index.commit(
-            f"[alpa]: autoupdate of package {pkg_name} to "
-            f"version {last_version_from_anytia}",
+        self.local_repo.git_cmd(["add", f"{pkg_name}.spec"])
+        self.local_repo.git_cmd(
+            [
+                "commit",
+                f"[alpa]: autoupdate of package {pkg_name} to "
+                f"version {last_version_from_anytia}",
+            ]
         )
-        return self.local_repo.git_cmd.log("--pretty=format:'%H'", "-n", "1").strip("'")
+        return self.local_repo.git_cmd(
+            ["log", "--pretty=format:'%H'", "-n", "1"]
+        ).stdout.strip("'")
 
     async def _push_changes(self, branch_to_push: str) -> bool:
         async_subprocess = await asyncio.create_subprocess_exec(
