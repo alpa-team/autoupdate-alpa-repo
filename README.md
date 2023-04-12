@@ -32,17 +32,17 @@ jobs:
   update:
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Autoupdate Alpa repository
-      uses: alpa-team/autoupdate-alpa-repository@<tag_name>
-      with:
-        email-name: example@water.xx
-        smtp-address: smtp.water.xx
-        email-password: ${{ secrets.ALPA_MAIL_BOT_PASSWORD }}
-        debug: true
+      - name: Autoupdate Alpa repository
+        uses: alpa-team/autoupdate-alpa-repository@<tag_name>
+        with:
+          email-name: example@water.xx
+          smtp-address: smtp.water.xx
+          email-password: ${{ secrets.ALPA_MAIL_BOT_PASSWORD }}
+          debug: true
 ```
 
 ### Options
