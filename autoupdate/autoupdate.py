@@ -65,8 +65,8 @@ class RequestEnum(str, Enum):
 
 class MailClient:
     def __init__(self) -> None:
-        self.sender = environ["INPUT_EMAIL_NAME"]
-        self.smtp_address = environ["INPUT_SMTP_ADDRESS"]
+        self.sender = environ["INPUT_EMAIL-NAME"]
+        self.smtp_address = environ["INPUT_SMTP-ADDRESS"]
 
     def _prepare_mail(self, receiver: str, topic: str, body: str) -> MIMEMultipart:
         mail = MIMEMultipart()
@@ -83,7 +83,7 @@ class MailClient:
     def send_email(self, receiver: str, topic: str, body: str) -> None:
         c = create_default_context()
         with SMTP_SSL(self.smtp_address, SMTP_SSL_PORT, context=c) as srv:
-            srv.login(self.sender, environ["INPUT_EMAIL_PASSWORD"])
+            srv.login(self.sender, environ["INPUT_EMAIL-PASSWORD"])
             mail = self._prepare_mail(receiver, topic, body)
             srv.sendmail(self.sender, receiver, mail.as_string())
 
@@ -146,6 +146,7 @@ class Autoupdator69:
         self.local_repo.git_cmd(
             [
                 "commit",
+                "-m",
                 f"[alpa]: autoupdate of package {pkg_name} to "
                 f"version {last_version_from_anytia}",
             ]
@@ -189,9 +190,12 @@ class Autoupdator69:
         )
         stdout, stderr = await async_subprocess.communicate()
         if async_subprocess.returncode == 0:
-            logger.info(stdout.decode())
+            # TODO: why are these None sometimes?
+            if stdout is not None:
+                logger.info(stdout.decode())
         else:
-            logger.error(stderr.decode())
+            if stderr is not None:
+                logger.error(stderr.decode())
 
         if not push_result:
             # probably some merge conflict
@@ -331,4 +335,23 @@ class Autoupdator69:
 
 
 if __name__ == "__main__":
+    # TODO: investigate this bug in checkout action
+    print(
+        subprocess.run(
+            [
+                "git",
+                "config",
+                "--global",
+                "--add",
+                "safe.directory",
+                "/github/workspace",
+            ]
+        )
+    )
+    print(subprocess.run(["git", "config", "--global", "user.name", "github-actions"]))
+    print(
+        subprocess.run(
+            ["git", "config", "--global", "user.email", "github-actions@github.com"]
+        )
+    )
     sys.exit(Autoupdator69().run_autoupdate())
