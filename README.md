@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Autoupdate Alpa repository
         uses: alpa-team/autoupdate-alpa-repository@<tag_name>
