@@ -19,7 +19,6 @@ from alpa.repository.branch import LocalRepoBranch
 from packaging.version import parse
 from specfile import Specfile
 
-
 if getenv("INPUT_DEBUG") == "true" or getenv("RUNNER_DEBUG") == "1":
     logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 else:
